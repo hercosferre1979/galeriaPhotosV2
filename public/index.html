@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload e Visualização de Imagens</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<h1>Faça Upload e Visualize Suas Imagens</h1>
+
+<div class="upload-section">
+    <input type="file" id="imageUpload" accept="image/*">
+    <button id="uploadButton">Upload Imagem</button>
+    <p id="message"></p>
+</div>
+
+<hr>
+
+<h2>Suas Imagens</h2>
+<div id="imageGallery">
+</div>
+
+<script>
+    const imageUpload = document.getElementById('imageUpload');
+    const uploadButton = document.getElementById('uploadButton');
+    const message = document.getElementById('message');
+    const imageGallery = document.getElementById('imageGallery');
+
+    // Função para carregar e exibir as imagens
+    async function loadImages() {
+        imageGallery.innerHTML = ''; // Limpa a galeria antes de recarregar
+        try {
+            const response = await fetch('/images');
+            if (!response.ok) {
+                throw new Error('Erro ao carregar imagens.');
+            }
+            const imageUrls = await response.json();
+            if (imageUrls.length === 0) {
+                imageGallery.innerHTML = '<p>Nenhuma imagem enviada ainda.</p>';
+                return;
+            }
+            imageUrls.forEach(url => {
+                const img = document.createElement('img');
+                img.src = url;
+                img.alt = 'Imagem enviada';
+                img.style.maxWidth = '200px'; // Apenas para visualização
+                img.style.margin = '10px';
+                img.style.border = '1px solid #ccc';
+                imageGallery.appendChild(img);
+            });
+        } catch (error) {
+            console.error('Erro ao carregar imagens:', error);
+            imageGallery.innerHTML = `<p style="color: red;">Erro ao carregar imagens: ${error.message}</p>`;
+        }
+    }
+
+    // Evento de clique para o botão de upload
+    uploadButton.addEventListener('click', async () => {
+        const file = imageUpload.files[0];
+        if (!file) {
+            message.textContent = 'Por favor, selecione um arquivo para upload.';
+            message.style.color = 'orange';
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('image', file); // 'image' deve corresponder ao nome no Multer
+
+        try {
+            const response = await fetch('/upload', {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (!response.ok) {
+                throw new Error('Falha no upload da imagem.');
+            }
+
+            const result = await response.json();
+            message.textContent = `Upload realizado com sucesso! Caminho: ${result.filePath}`;
+            message.style.color = 'green';
+            imageUpload.value = ''; // Limpa o input de arquivo
+            loadImages(); // Recarrega a galeria para mostrar a nova imagem
+        } catch (error) {
+            console.error('Erro no upload:', error);
+            message.textContent = `Erro no upload: ${error.message}`;
+            message.style.color = 'red';
+        }
+    });
+
+    // Carrega as imagens quando a página é carregada pela primeira vez
+    loadImages();
+</script>
+</body>
+</html>
