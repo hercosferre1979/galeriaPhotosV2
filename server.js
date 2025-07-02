@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 3000;
 
 // --- Middlewares ---
 // 1. Serve arquivos estáticos da pasta 'public' (HTML, CSS, JS do frontend)
-app.use(express.static('public'));
+//app.use(express.static('public'));
 
 // 2. Serve as imagens da pasta 'uploads' (para visualização das imagens individuais)
 app.use('/uploads', express.static('uploads'));
