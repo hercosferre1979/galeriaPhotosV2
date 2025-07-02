@@ -1,6 +1,7 @@
 const express = require('express');
 const multer = require('multer');
-const path = require('path'); // Módulo nativo do Node.js para lidar com caminhos de arquivos
+const path = require('path');
+const fs = require('fs');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
