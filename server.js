@@ -3,7 +3,7 @@ const multer = require('multer');
 const path = require('path'); // Módulo nativo do Node.js para lidar com caminhos de arquivos
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
 // --- Configuração do Multer para o Upload ---
 // Configura o armazenamento das imagens
