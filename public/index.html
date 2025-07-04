@@ -34,7 +34,7 @@
     async function loadImages() {
         imageGallery.innerHTML = ''; // Limpa a galeria antes de recarregar
         try {
-            const response = await fetch('/images');
+            const response = await fetch('/api/images');
             if (!response.ok) {
                 throw new Error('Erro ao carregar imagens.');
             }
@@ -71,7 +71,7 @@
         formData.append('image', file); // 'image' deve corresponder ao nome no Multer
 
         try {
-            const response = await fetch('/upload', {
+            const response = await fetch('/api/upload', {
                 method: 'POST',
                 body: formData,
             });

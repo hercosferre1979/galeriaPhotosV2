@@ -5,7 +5,6 @@ const fs = require('fs'); // Certifique-se de que 'fs' está importado
 const upload = multer({ dest: 'uploads/' });
 
 const app = express();
-app.set('base', '/api');
 const PORT = process.env.PORT || 3000;
 
 // --- Configuração do Multer (Deixe-o aqui) ---
@@ -16,7 +15,7 @@ const PORT = process.env.PORT || 3000;
 //app.use(express.static('public'));
 
 // 2. Serve as imagens da pasta 'uploads' (para visualização das imagens individuais)
-app.use('/uploads', express.static('uploads'));
+app.use('/api/uploads', express.static('uploads'));
 
 // --- Rotas ---
 // Rota para a página inicial (se você tiver uma, embora 'express.static' já sirva 'index.html')
@@ -25,7 +24,7 @@ app.use('/uploads', express.static('uploads'));
 // });
 
 // Rota para lidar com o upload da imagem (POST)
-app.post('/upload', upload.single('image'), (req, res) => {
+app.post('/api/upload', upload.single('image'), (req, res) => {
     if (!req.file) {
         return res.status(400).send('Nenhum arquivo enviado.');
     }
@@ -34,7 +33,7 @@ app.post('/upload', upload.single('image'), (req, res) => {
 
 // Rota para listar as imagens (GET /images)
 // ESTA É A ROTA QUE VOCÊ ESTÁ TENDO PROBLEMAS, VERIFIQUE SE ELA ESTÁ EXATAMENTE ASSIM
-app.get('/images', (req, res) => {
+app.get('/api/images', (req, res) => {
     const directoryPath = path.join(__dirname, 'uploads');
 
     fs.readdir(directoryPath, function (err, files) {
