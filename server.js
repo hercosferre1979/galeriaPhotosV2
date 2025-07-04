@@ -5,6 +5,7 @@ const fs = require('fs'); // Certifique-se de que 'fs' está importado
 const upload = multer({ dest: 'uploads/' });
 
 const app = express();
+app.set('base', '/api');
 const PORT = process.env.PORT || 3000;
 
 // --- Configuração do Multer (Deixe-o aqui) ---
